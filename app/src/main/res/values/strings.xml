@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">calendar_planner</string>
     <string name="title_activity_event_map">Map</string>
+    <string name="invalid_address_used"> Invalid address format error found </string>
+    <string name="service_not_available"> Network issue error found</string>
+    <string name="no_results_found"> The address entered returned no results</string>
+    <string name="address_found">An address was found!</string>
 </resources>
