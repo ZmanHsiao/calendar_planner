@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">calendar_planner</string>
+    <string name="title_activity_event_map">Map</string>
 </resources>
