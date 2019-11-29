@@ -28,20 +28,18 @@ class FetchAddressIntentService : IntentService("getLatLong") {
     private var receiver: ResultReceiver? = null
 
     override fun onHandleIntent(intent: Intent?) {
+        intent ?: return
 
-//        intent ?: return
-        // Get the location passed to this service through an extra.
-//        val location = intent.getParcelableExtra(
-//            Constants.LOCATION_DATA_EXTRA)
-
-        val location = intent!!.getStringExtra(Constants.LOCATION_DATA_EXTRA)
+//        val location = intent!!.getStringExtra(Constants.LOCATION_DATA_EXTRA)
+        val location = "fairfax condominium"
+        val bias = " Seattle, WA"
 
         var addresses: List<Address> = emptyList()
 
         val geocoder = Geocoder(this, Locale.getDefault())
         var errorMessage = ""
         try {
-            addresses = geocoder.getFromLocationName(location, 1)
+            addresses = geocoder.getFromLocationName(location + bias , 1)
         } catch (ioException: IOException) {
             // Catch network or other I/O problems.
             errorMessage = getString(R.string.service_not_available)
@@ -66,6 +64,7 @@ class FetchAddressIntentService : IntentService("getLatLong") {
             val address = addresses.get(0)
             val lat = address.latitude
             val long = address.longitude
+            Log.d(TAG,"The latitude and longitude is $lat and $long")
 
             // Fetch the address lines using getAddressLine,
             // join them, and send them to the thread.
