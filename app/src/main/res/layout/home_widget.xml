@@ -1,7 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#fff">
+    android:background="#00ffffff">
 
     <TextView
         android:id="@+id/appwidget_title_text"
@@ -10,18 +10,18 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:layout_alignParentTop="true"
-        android:contentDescription="@string/app_name"
-        android:text="@string/app_name"
+        android:text="Planner"
         android:textSize="24sp"
-        android:textStyle="bold|italic"
-        android:background="@color/colorAccent" />
+        android:padding="8dp"
+        android:textColor="#fff"
+        android:drawableRight="@drawable/ic_widget_add"
+        android:background="@color/colorPrimaryDark" />
 
     <ListView
         android:id="@+id/appwidget_list"
-        android:padding="8dp"
-        android:layout_alignBaseline="@+id/appwidget_title_text"
-        android:layout_alignParentEnd="true"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_below="@+id/appwidget_title_text"
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>

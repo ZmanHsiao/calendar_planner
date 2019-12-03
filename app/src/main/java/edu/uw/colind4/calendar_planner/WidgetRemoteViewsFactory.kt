@@ -6,12 +6,12 @@ import android.widget.RemoteViews
 import android.widget.RemoteViewsService
 import android.widget.Toast
 
-data class TodoItem(val name: String)
+data class TodoItem(val name: String, val date: String)
 
 val todoList = listOf<TodoItem>(
-    TodoItem("Assignment 1"),
-    TodoItem("Project 2"),
-    TodoItem("Exam 3")
+    TodoItem("Assignment 1", "11/01"),
+    TodoItem("Project 2", "12/02"),
+    TodoItem("Exam 3", "12/03")
 )
 
 class WidgetRemoteViewsFactory(private val context: Context, private val intent: Intent): RemoteViewsService.RemoteViewsFactory {
@@ -38,7 +38,8 @@ class WidgetRemoteViewsFactory(private val context: Context, private val intent:
     override fun getViewAt(position: Int): RemoteViews {
         return RemoteViews(context.packageName, R.layout.widget_list_item)
             .apply {
-                setTextViewText(R.id.widget_list_text, todoList[position].name)
+                // TODO: Add OnClick listener to each ListView item
+                setTextViewText(R.id.widget_list_text, todoList[position].name + " @ " + todoList[position].date)
             }
     }
 

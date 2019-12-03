@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun updateWidget() {
         val intent = Intent(this, HomeWidget::class.java)
-        intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE)
+        intent.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
         val ids = AppWidgetManager.getInstance(this).getAppWidgetIds(ComponentName(this, AppWidgetManager::class.java))
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, ids)
         sendBroadcast(intent);

@@ -3,10 +3,10 @@ package edu.uw.colind4.calendar_planner
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
-import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.widget.RemoteViews
+import android.widget.Toast
 
 /**
  * Implementation of App Widget functionality.
@@ -44,6 +44,7 @@ class HomeWidget : AppWidgetProvider() {
                 setOnClickPendingIntent(R.id.appwidget_title_text, pendingIntent)
             }
         appWidgetManager.updateAppWidget(appWidgetId, views)
+        Toast.makeText(context, "onClick Updated!", Toast.LENGTH_SHORT).show()
     }
 
     // Update ListView in the widget
@@ -54,5 +55,6 @@ class HomeWidget : AppWidgetProvider() {
                 setRemoteAdapter(R.id.appwidget_list, intent)
             }
         appWidgetManager.updateAppWidget(appWidgetId, views)
+        Toast.makeText(context, "ListView Updated!", Toast.LENGTH_SHORT).show()
     }
 }
