@@ -19,6 +19,8 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.activity_event_map.*
 import kotlinx.android.synthetic.main.activity_main.*
+import android.view.MenuItem
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private var lastLocation: Location? = null
@@ -34,8 +36,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             val lat = resultData?.getDouble(Constants.LAT_KEY) ?: 0.0
             val long = resultData?.getDouble(Constants.LONG_KEY) ?: 0.0
 
-import android.view.MenuItem
-import kotlinx.android.synthetic.main.activity_main.*
+
 
 
             // Show a toast message if an address was found.
