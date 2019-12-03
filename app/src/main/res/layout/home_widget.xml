@@ -10,7 +10,7 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:layout_alignParentTop="true"
-        android:text="Planner"
+        android:text="Events Today"
         android:textSize="24sp"
         android:padding="8dp"
         android:textColor="#fff"

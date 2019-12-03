@@ -5,13 +5,14 @@ import android.content.ComponentName
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_event_map)
-
+        setContentView(R.layout.activity_main)
+        addAddButton()
         updateWidget()
     }
 
@@ -21,5 +22,12 @@ class MainActivity : AppCompatActivity() {
         val ids = AppWidgetManager.getInstance(this).getAppWidgetIds(ComponentName(this, AppWidgetManager::class.java))
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, ids)
         sendBroadcast(intent);
+    }
+
+    private fun addAddButton() {
+        button.setOnClickListener {
+            val intent = Intent(this, add_event::class.java)
+            this.startActivity(intent)
+        }
     }
 }
