@@ -1,0 +1,27 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fff">
+
+    <TextView
+        android:id="@+id/appwidget_title_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_alignParentTop="true"
+        android:contentDescription="@string/app_name"
+        android:text="@string/app_name"
+        android:textSize="24sp"
+        android:textStyle="bold|italic"
+        android:background="@color/colorAccent" />
+
+    <ListView
+        android:id="@+id/appwidget_list"
+        android:padding="8dp"
+        android:layout_alignBaseline="@+id/appwidget_title_text"
+        android:layout_alignParentEnd="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</RelativeLayout>
