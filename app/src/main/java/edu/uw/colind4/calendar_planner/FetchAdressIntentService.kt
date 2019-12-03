@@ -21,6 +21,8 @@ object Constants {
     const val RECEIVER = "$PACKAGE_NAME.RECEIVER"
     const val RESULT_DATA_KEY = "${PACKAGE_NAME}.RESULT_DATA_KEY"
     const val LOCATION_DATA_EXTRA = "${PACKAGE_NAME}.LOCATION_DATA_EXTRA"
+    const val LAT_KEY = "LATITUDE"
+    const val LONG_KEY = "LONGITUDE"
 }
 
 
@@ -28,9 +30,9 @@ class FetchAddressIntentService : IntentService("getLatLong") {
     private var receiver: ResultReceiver? = null
 
     override fun onHandleIntent(intent: Intent?) {
-        intent ?: return
 
 //        val location = intent!!.getStringExtra(Constants.LOCATION_DATA_EXTRA)
+        receiver = intent!!.getParcelableExtra(Constants.RECEIVER)
         val location = "fairfax condominium"
         val bias = " Seattle, WA"
 
@@ -39,7 +41,7 @@ class FetchAddressIntentService : IntentService("getLatLong") {
         val geocoder = Geocoder(this, Locale.getDefault())
         var errorMessage = ""
         try {
-            addresses = geocoder.getFromLocationName(location + bias , 1)
+            addresses = geocoder.getFromLocationName(location + bias, 1)
         } catch (ioException: IOException) {
             // Catch network or other I/O problems.
             errorMessage = getString(R.string.service_not_available)
@@ -58,13 +60,13 @@ class FetchAddressIntentService : IntentService("getLatLong") {
                 errorMessage = getString(R.string.no_results_found)
                 Log.e(TAG, errorMessage)
             }
-            deliverResultToReceiver(Constants.FAILURE_RESULT, errorMessage)
+            deliverResultToReceiver(Constants.FAILURE_RESULT, errorMessage, 0.0, 0.0)
         } else {
 
             val address = addresses.get(0)
             val lat = address.latitude
             val long = address.longitude
-            Log.d(TAG,"The latitude and longitude is $lat and $long")
+            Log.d(TAG, "The latitude and longitude is $lat and $long")
 
             // Fetch the address lines using getAddressLine,
             // join them, and send them to the thread.
@@ -74,13 +76,23 @@ class FetchAddressIntentService : IntentService("getLatLong") {
             Log.i(TAG, getString(R.string.address_found))
             deliverResultToReceiver(
                 Constants.SUCCESS_RESULT,
-                addressFragments.joinToString(separator = "\n")
+                addressFragments.joinToString(separator = "\n"),
+                lat, long
             )
         }
     }
 
-    private fun deliverResultToReceiver(resultCode: Int, message: String) {
-        val bundle = Bundle().apply { putString(Constants.RESULT_DATA_KEY, message) }
+    private fun deliverResultToReceiver(
+        resultCode: Int,
+        message: String,
+        latitude: Double,
+        longitude: Double
+    ) {
+        val bundle = Bundle().apply {
+            putString(Constants.RESULT_DATA_KEY, message)
+            putDouble(Constants.LAT_KEY, latitude)
+            putDouble(Constants.LONG_KEY, longitude)
+        }
         receiver?.send(resultCode, bundle)
     }
 
