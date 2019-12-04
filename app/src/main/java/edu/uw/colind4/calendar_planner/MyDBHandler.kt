@@ -91,11 +91,14 @@ class MyDBHandler(context: Context, name: String?,
             val id = Integer.parseInt(cursor.getString(0))
             val day = Integer.parseInt(cursor.getString(1))
             val month = Integer.parseInt(cursor.getString(2))
-            val year = Integer.parseInt(cursor.getString(3))
+            var year = Integer.parseInt(cursor.getString(3))
             val title = cursor.getString(4)
             val notes = cursor.getString(5)
             val address = cursor.getString(6)
-            val time = Integer.parseInt(cursor.getString(7))
+            var time: Int? = null
+            if(!cursor.isNull(7)) {
+                Integer.parseInt(cursor.getString(7))
+            }
             val notification = cursor.getString(8)
             events.add(Event(id, day, month, year, title, notes, address, time, notification))
         }
