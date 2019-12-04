@@ -107,7 +107,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         intent.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
         val ids = AppWidgetManager.getInstance(this).getAppWidgetIds(ComponentName(this, AppWidgetManager::class.java))
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, ids)
-        sendBroadcast(intent);
+        sendBroadcast(intent)
     }
 
     private fun addAddButton() {

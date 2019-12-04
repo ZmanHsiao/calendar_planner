@@ -5,8 +5,6 @@ import android.content.Intent
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
 
-data class TodoItem(val name: String, val date: String)
-
 class WidgetRemoteViewsFactory(private val context: Context, private val intent: Intent): RemoteViewsService.RemoteViewsFactory {
     private var dbHandler: MyDBHandler? = null
     private var result : List<Event>? = null
@@ -25,7 +23,7 @@ class WidgetRemoteViewsFactory(private val context: Context, private val intent:
     }
 
     override fun onDataSetChanged() {
-        return
+        result = dbHandler?.findEventsList("25", "12", "2019")
     }
 
     override fun hasStableIds(): Boolean {
@@ -53,6 +51,6 @@ class WidgetRemoteViewsFactory(private val context: Context, private val intent:
     }
 
     override fun onDestroy() {
-        return
+
     }
 }
