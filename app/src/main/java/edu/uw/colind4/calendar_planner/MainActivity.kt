@@ -20,6 +20,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.activity_event_map.*
 import kotlinx.android.synthetic.main.activity_main.*
 import android.view.MenuItem
+import android.widget.Button
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback {
@@ -66,6 +67,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
     }
 
     private fun startIntentService() {
@@ -93,10 +95,17 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
         setContentView(R.layout.activity_main)
-
+        findViewById<Button>(R.id.open).setOnClickListener{openDay()}
         newEventBtn.setOnClickListener {
             val intent = Intent(this, add_event::class.java)
             this.startActivity(intent)
         }
+    }
+
+
+    private fun openDay() {
+        val intent = Intent(this, DaySchedule::class.java)
+        intent.putExtra("date", calendar.date)
+        startActivity(intent)
     }
 }

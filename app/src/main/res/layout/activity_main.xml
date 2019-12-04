@@ -23,16 +23,26 @@
         android:layout_width="320dp"
         android:layout_height="wrap_content" >
         <CalendarView
+            android:id="@+id/calendar"
             android:layout_width="wrap_content"
             android:layout_height="320dp" />
     </LinearLayout>
-
-    <Button
+    <LinearLayout
         android:layout_marginTop="48dp"
         android:layout_gravity="center_horizontal"
-        android:id="@+id/newEventBtn"
-        android:text="Create"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/newEventBtn"
+            android:text="Create"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <Button
+            android:id="@+id/open"
+            android:text="View"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
 
 </LinearLayout>
