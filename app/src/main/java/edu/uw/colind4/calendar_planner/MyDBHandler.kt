@@ -127,7 +127,7 @@ class MyDBHandler(context: Context, name: String?,
         db.close()
     }
 
-    fun deleteProduct(id: Int): Boolean {
+    fun deleteEvent(id: Int): Boolean {
 
         var result = false
 
