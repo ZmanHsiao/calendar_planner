@@ -33,10 +33,14 @@ class WidgetRemoteViewsFactory(private val context: Context, private val intent:
     }
 
     override fun getViewAt(position: Int): RemoteViews {
+        val fillInIntent = Intent()
+            .apply {
+                putExtra("LIST_ITEM_TAG", position)
+            }
         return RemoteViews(context.packageName, R.layout.widget_list_item)
             .apply {
-                // TODO: Add OnClick listener to each ListView item
                 setTextViewText(R.id.widget_list_text, result?.get(position)?.title.toString())
+                setOnClickFillInIntent(R.id.widget_list_item, fillInIntent)
             }
     }
 

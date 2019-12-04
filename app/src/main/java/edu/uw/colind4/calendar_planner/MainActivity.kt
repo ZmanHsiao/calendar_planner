@@ -6,11 +6,8 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import kotlinx.android.synthetic.main.activity_main.*
-import android.content.Intent
 import android.location.Geocoder
 import android.location.Location
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
 import android.os.Handler
 import android.os.ResultReceiver
 import android.util.Log
@@ -69,6 +66,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_event_map)
         test_button.setOnClickListener { fetchAddressButtonHander() }
+
+        updateWidget()
+
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
@@ -100,7 +100,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap = googleMap
         setContentView(R.layout.activity_main)
         addAddButton()
-        updateWidget()
     }
 
     private fun updateWidget() {
@@ -112,7 +111,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun addAddButton() {
-        button.setOnClickListener {
+        newEventBtn.setOnClickListener {
             val intent = Intent(this, add_event::class.java)
             this.startActivity(intent)
         }
