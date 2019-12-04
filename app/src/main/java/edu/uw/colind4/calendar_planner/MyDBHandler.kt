@@ -127,6 +127,27 @@ class MyDBHandler(context: Context, name: String?,
         db.close()
     }
 
+    fun deleteProduct(id: Int): Boolean {
+
+        var result = false
+
+        val query =
+            "SELECT * FROM $TABLE_EVENTS WHERE $COLUMN_ID = \"$id\""
+
+        val db = this.writableDatabase
+
+        val cursor = db.rawQuery(query, null)
+
+        if (cursor.moveToFirst()) {
+            val id = Integer.parseInt(cursor.getString(0))
+            db.delete(TABLE_EVENTS, COLUMN_ID + " = ${id.toString()}", null)
+            cursor.close()
+            result = true
+        }
+        db.close()
+        return result
+    }
+
     companion object {
 
         private val DATABASE_VERSION = 1
