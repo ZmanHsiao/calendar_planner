@@ -10,10 +10,7 @@ import android.location.Geocoder
 import android.location.Location
 import android.os.Handler
 import android.os.ResultReceiver
-import android.util.Log
-import android.view.View
 import android.widget.Toast
-import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -21,9 +18,6 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.activity_event_map.*
-import kotlinx.android.synthetic.main.activity_main.*
-import android.view.MenuItem
-import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private var lastLocation: Location? = null
@@ -112,7 +106,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun addAddButton() {
         newEventBtn.setOnClickListener {
-            val intent = Intent(this, add_event::class.java)
+            val intent = Intent(this, AddEvent::class.java)
             this.startActivity(intent)
         }
     }
