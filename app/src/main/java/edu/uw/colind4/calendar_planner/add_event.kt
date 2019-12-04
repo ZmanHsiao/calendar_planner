@@ -13,6 +13,7 @@ import android.os.Build
 import android.os.SystemClock
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import java.text.SimpleDateFormat
@@ -22,9 +23,12 @@ class add_event : AppCompatActivity() {
     var chosen_date: Int? = null
     var chosen_month: Int? = null
     var chosen_year: Int? = null
-    var timeMillis: Int? = null
+    var chosen_hour: Int? = null
+    var chosen_min: Int? = null
     var notifications: String? = "true"
     val CHANNEL_ID : String = "reminder_channel"
+    var toggleAddress: Boolean = true
+    var toggleTime: Boolean = true
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,17 +57,11 @@ class add_event : AppCompatActivity() {
         pickTimeBtn.setOnClickListener {
             val cal = Calendar.getInstance()
                 val timeSetListener = TimePickerDialog.OnTimeSetListener { timePicker, hour, minute ->
-                    cal.set(Calendar.HOUR_OF_DAY, hour)
-                    cal.set(Calendar.MINUTE, minute)
-                    cal.set(Calendar.DATE, chosen_date as Int)
-                    cal.set(Calendar.MONTH, chosen_month as Int)
-                    cal.set(Calendar.YEAR, chosen_year as Int)
-
-                pickTimeBtn.text = SimpleDateFormat("HH:mm").format(cal.time)
-                Log.d("TI1", cal.getTimeInMillis().toInt().toString())
-                Log.d("TI2", Calendar.getInstance().getTimeInMillis().toInt().toString())
-                timeMillis = cal.getTimeInMillis().toInt() - Calendar.getInstance().getTimeInMillis().toInt()
-                Log.d("TIM", timeMillis.toString())
+                    chosen_hour = hour
+                    chosen_min = minute
+                    cal.set(Calendar.HOUR_OF_DAY, chosen_hour!!)
+                    cal.set(Calendar.MINUTE, chosen_min!!)
+                    pickTimeBtn.text = SimpleDateFormat("HH:mm").format(cal.time)
             }
             TimePickerDialog(this, timeSetListener, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), true).show()
         }
@@ -72,20 +70,24 @@ class add_event : AppCompatActivity() {
             if (isChecked) {
                 // The toggle is enabled
                 pickTimeBtn.setVisibility(View.GONE)
+                toggleTime = false
 
             } else {
                 // The toggle is disabled
                 pickTimeBtn.setVisibility(View.VISIBLE)
+                toggleTime = true
             }
         }
 
         address_btn.setOnCheckedChangeListener{ _, isChecked ->
             if (isChecked) {
                 // The toggle is enabled
+                toggleAddress = false
                 address_input.setVisibility(View.GONE)
 
             } else {
                 // The toggle is disabled
+                toggleAddress = true
                 address_input.setVisibility(View.VISIBLE)
             }
         }
@@ -93,20 +95,77 @@ class add_event : AppCompatActivity() {
         notification_btn.setOnCheckedChangeListener{ _, isChecked ->
             if (isChecked) {
                 // The toggle is enabled
-                notifications = "true"
+                notifications = "false"
 
             } else {
                 // The toggle is disabled
-                notifications = "false"
+                notifications = "true"
             }
         }
 
         submit_btn.setOnClickListener {
-            val dbHandler = MyDBHandler(this, null, null, 1)
-            val event = Event(chosen_date!!, chosen_month!!, chosen_year!!, title_input.text.toString(), notes_input.text.toString(), address_input.text.toString(), timeMillis!!, notifications.toString())
-            dbHandler.addProduct(event)
+            if (chosen_date == null) {
+                Toast.makeText(this, "You must choose a Date", Toast.LENGTH_LONG).show()
+            } else if (chosen_min == null && toggleTime == true) {
+                Toast.makeText(
+                    this,
+                    "You must choose a time or choose \"All Day Event\"",
+                    Toast.LENGTH_LONG
+                ).show()
+            } else if(title_input.text.isEmpty()){
+                Toast.makeText(
+                    this,
+                    "You must include a title",
+                    Toast.LENGTH_LONG
+                ).show()
+            }else if (address_input.text.isEmpty() && toggleAddress == true) {
+                Toast.makeText(
+                    this,
+                    "You must choose an address or choose \"No Specific Address\"",
+                    Toast.LENGTH_LONG
+                ).show()
+            } else if (notifications.equals("true") && chosen_min == null) {
+                Toast.makeText(
+                    this,
+                    "You must choose a Time if you want to set a reminder",
+                    Toast.LENGTH_LONG
+                ).show()
+            } else if(notifications.equals("true") && toggleTime == false) {
+                Toast.makeText(
+                    this,
+                    "You must choose a Time if you want to set a reminder",
+                    Toast.LENGTH_LONG
+                ).show()
+            }else {
+                val dbHandler = MyDBHandler(this, null, null, 1)
 
-            scheduleNotification(this, timeMillis!! , 1)
+                var final_address: String? = ""
+                if(toggleAddress == true) {
+                    final_address = address_input.text.toString()
+                }
+
+                var timeInMilli: Long? = null
+
+                if(toggleTime == true) {
+                    val cal = Calendar.getInstance()
+                    cal.set(Calendar.HOUR_OF_DAY, chosen_hour!!)
+                    cal.set(Calendar.MINUTE, chosen_min!!)
+                    cal.set(Calendar.DATE, chosen_date as Int)
+                    cal.set(Calendar.MONTH, chosen_month!!.minus(1) as Int)
+                    cal.set(Calendar.YEAR, chosen_year as Int)
+                    timeInMilli = cal.timeInMillis - Calendar.getInstance().timeInMillis
+                }
+
+                val event = Event(chosen_date!!, chosen_month!!, chosen_year!!, title_input.text.toString(), notes_input.text.toString(), final_address, timeInMilli?.toInt(), notifications.toString())
+                dbHandler.addProduct(event)
+
+                if(notifications.equals("true")) {
+                    if(!notification_input.text.isEmpty()) {
+                        timeInMilli = timeInMilli?.minus(notification_input.text.toString().toLong() * 1000 * 60)
+                    }
+                    scheduleNotification(this, timeInMilli!!, 1)
+                }
+            }
         }
 
         test_btn.setOnClickListener {
@@ -141,15 +200,15 @@ class add_event : AppCompatActivity() {
         }
     }
 
-    private fun scheduleNotification(context: Context, delay: Int, notificationId: Int) {
+    private fun scheduleNotification(context: Context, delay: Long, notificationId: Int) {
 
         val intent = Intent(context, MainActivity::class.java)
         val pIntent: PendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT)
 
         val builder = NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(R.drawable.bell_icon)
-            .setContentTitle("My notification")
-            .setContentText("Hello World!")
+            .setContentTitle(title_input.text.toString())
+            .setContentText(notes_input.text.toString())
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             // Set the intent that will fire when the user taps the notification
             .setContentIntent(pIntent)
@@ -161,10 +220,9 @@ class add_event : AppCompatActivity() {
         notificationIntent.putExtra(MyBroadcastReceiverClass.Constants.NOTIFICATION_ID, notificationId)
         notificationIntent.putExtra(MyBroadcastReceiverClass.Constants.NOTIFICATION, notification)
         val pendingIntent = PendingIntent.getBroadcast(context, notificationId, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT)
-        Log.d("TIME CHECK", " The elapsed time is ${SystemClock.elapsedRealtime()} and the time added is $timeMillis")
-        val futureInMillis = SystemClock.elapsedRealtime() + delay
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent)
+        Log.d("TIM", delay.toString())
+        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + delay, pendingIntent)
     }
 
     class MyBroadcastReceiverClass(): BroadcastReceiver() {
@@ -173,7 +231,7 @@ class add_event : AppCompatActivity() {
         object Constants {
             const val NOTIFICATION_ID: String = "notification_id"
             const val NOTIFICATION: String = "notification"
-        }
+            }
 
         override fun onReceive(c: Context, intent: Intent) {
             if (intent.getAction()!!.equals("notify")) {
