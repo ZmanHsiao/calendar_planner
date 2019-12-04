@@ -170,7 +170,7 @@ class add_event : AppCompatActivity() {
 
         test_btn.setOnClickListener {
             val dbHandler = MyDBHandler(this, null, null, 1)
-            var result = dbHandler.findEventsList("25", "12", "2019")
+            var result = dbHandler.findEventsList("4", "12", "2019")
             test_view.text = result?.size.toString()
             //test_view2.text = "month = ${result!![5].month}, day = ${result!![4].day} year = ${result!![4].year} "
         }
