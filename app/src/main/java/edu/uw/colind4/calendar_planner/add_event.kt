@@ -96,10 +96,12 @@ class add_event : AppCompatActivity() {
             if (isChecked) {
                 // The toggle is enabled
                 notifications = "false"
+                notification_input.setVisibility(View.GONE)
 
             } else {
                 // The toggle is disabled
                 notifications = "true"
+                notification_input.setVisibility(View.VISIBLE)
             }
         }
 
@@ -174,8 +176,6 @@ class add_event : AppCompatActivity() {
             test_view.text = result?.size.toString()
             //test_view2.text = "month = ${result!![5].month}, day = ${result!![4].day} year = ${result!![4].year} "
         }
-
-
     }
 
     override fun onSupportNavigateUp(): Boolean {
