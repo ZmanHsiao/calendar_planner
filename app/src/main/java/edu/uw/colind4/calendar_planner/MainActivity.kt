@@ -23,7 +23,10 @@ import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.activity_event_map.*
 import kotlinx.android.synthetic.main.activity_main.*
 import android.view.MenuItem
+import android.widget.CalendarView
 import kotlinx.android.synthetic.main.activity_main.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private var lastLocation: Location? = null
@@ -100,6 +103,29 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap = googleMap
         setContentView(R.layout.activity_main)
         addAddButton()
+        var sdf = SimpleDateFormat("dd/MM/yyyy")
+        val netdate = Date(calendar.date)
+        var time = sdf.format(netdate)
+        var tarray = time.split("/")
+        open.setOnClickListener{openDay(tarray[0].toInt(), tarray[1].toInt(), tarray[2].toInt())}
+        calendar.setOnDateChangeListener( object: CalendarView.OnDateChangeListener {
+            override fun onSelectedDayChange(
+                view: CalendarView,
+                year: Int,
+                month: Int,
+                dayOfMonth: Int
+            ) {
+                open.setOnClickListener{openDay(dayOfMonth, month + 1, year)}
+            }
+        } )
+    }
+
+    private fun openDay(day: Int, month: Int, year: Int) {
+        val intent = Intent(this, DaySchedule::class.java)
+        intent.putExtra("day", day)
+        intent.putExtra("month", month)
+        intent.putExtra("year", year)
+        startActivity(intent)
     }
 
     private fun updateWidget() {
