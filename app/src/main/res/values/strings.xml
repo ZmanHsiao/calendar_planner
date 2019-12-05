@@ -6,4 +6,5 @@
     <string name="no_results_found"> The address entered returned no results</string>
     <string name="address_found">An address was found!</string>
     <string name="no_geocoder_available"> Error: no geocoder has been made!</string>
+    <string name="title_activity_test_activity">test_activity</string>
 </resources>
