@@ -29,6 +29,7 @@ class AddEvent : AppCompatActivity() {
     val CHANNEL_ID : String = "reminder_channel"
     var toggleAddress: Boolean = true
     var toggleTime: Boolean = true
+    var NotificationBroadcastReceiver: MyBroadcastReceiverClass? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,7 +50,7 @@ class AddEvent : AppCompatActivity() {
             }
         }
         val intentFilter= IntentFilter("notify")
-        val NotificationBroadcastReceiver = MyBroadcastReceiverClass()
+        NotificationBroadcastReceiver = MyBroadcastReceiverClass()
         registerReceiver(NotificationBroadcastReceiver, intentFilter)
 
         val c = Calendar.getInstance()
@@ -197,6 +198,11 @@ class AddEvent : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return super.onSupportNavigateUp()
+    }
+
+    override fun onDestroy() {
+        unregisterReceiver(NotificationBroadcastReceiver)
+        super.onDestroy()
     }
 
     private fun createNotificationChannel() {
