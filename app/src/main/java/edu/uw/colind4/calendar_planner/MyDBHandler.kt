@@ -67,7 +67,7 @@ class MyDBHandler(context: Context, name: String?,
             val title = cursor.getString(4)
             val notes = cursor.getString(5)
             val address = cursor.getString(6)
-            val time = Integer.parseInt(cursor.getString(7))
+            val time = Integer.parseInt(cursor.getString(7)).toLong()
             val notification = cursor.getString(8)
             result = Event(id, day, month, year, title, notes, address, time, notification)
             cursor.close()
@@ -84,7 +84,7 @@ class MyDBHandler(context: Context, name: String?,
         val db = this.writableDatabase
 
         val cursor = db.rawQuery(query, null)
-        cursor!!.moveToFirst()
+        //cursor!!.moveToFirst()
         var events: MutableList<Event> = mutableListOf()
 
         while (cursor.moveToNext()) {
@@ -95,9 +95,9 @@ class MyDBHandler(context: Context, name: String?,
             val title = cursor.getString(4)
             val notes = cursor.getString(5)
             val address = cursor.getString(6)
-            var time: Int? = null
+            var time: Long? = null
             if(!cursor.isNull(7)) {
-                Integer.parseInt(cursor.getString(7))
+                time = cursor.getString(7).toLong()
             }
             val notification = cursor.getString(8)
             events.add(Event(id, day, month, year, title, notes, address, time, notification))

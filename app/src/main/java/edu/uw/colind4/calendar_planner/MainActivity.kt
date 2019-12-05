@@ -8,9 +8,12 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.CalendarView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.activity_main.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,17 +46,45 @@ class MainActivity : AppCompatActivity() {
             )
         }
 
-        test_btn.setOnClickListener {
-            val intent = Intent(this, map_activity::class.java).apply {
-                putExtra("address", "smith tower")
+
+
+        var sdf = SimpleDateFormat("dd/MM/yyyy")
+        val netdate = Date(calendar.date)
+        var time = sdf.format(netdate)
+        var tarray = time.split("/")
+        var sday = tarray[0]
+        var smonth = tarray[1]
+        var syear = tarray[2]
+        open.setOnClickListener{openDay(tarray[0].toInt(), tarray[1].toInt(), tarray[2].toInt())}
+        calendar.setOnDateChangeListener( object: CalendarView.OnDateChangeListener {
+            override fun onSelectedDayChange(
+                view: CalendarView,
+                year: Int,
+                month: Int,
+                dayOfMonth: Int
+            ) {
+                sday = dayOfMonth.toString()
+                smonth = (month + 1).toString()
+                syear = year.toString()
+                open.setOnClickListener{openDay(dayOfMonth, month + 1, year)}
             }
-            startActivity(intent)
-            addAddButton()
-
-
+        })
+        newEventBtn.setOnClickListener {
+            val intent = Intent(this, AddEvent::class.java)
+            intent.putExtra("day", sday)
+            intent.putExtra("month", smonth)
+            intent.putExtra("year", syear)
+            this.startActivity(intent)
         }
 
+    }
 
+    private fun openDay(day: Int, month: Int, year: Int) {
+        val intent = Intent(this, DaySchedule::class.java)
+        intent.putExtra("day", day)
+        intent.putExtra("month", month)
+        intent.putExtra("year", year)
+        startActivity(intent)
     }
 
     private fun updateWidget() {
@@ -70,6 +101,5 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, AddEvent::class.java)
             this.startActivity(intent)
         }
-
     }
 }

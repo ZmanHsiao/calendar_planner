@@ -34,7 +34,20 @@ class AddEvent : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_event)
-
+        if (intent.getStringExtra("day") != null) {
+            chosen_date = intent.extras!!.getString("day")!!.toInt()
+            chosen_month = intent.extras!!.getString("month")!!.toInt()
+            chosen_year = intent.extras!!.getString("year")!!.toInt()
+            date_btn.setText("" + chosen_month + "/" + chosen_date + "/"+ chosen_year)
+            if (intent.extras!!.containsKey("title")) {
+                // EVENT INFORMATION HERE! NEEDS TO BE STORED
+                title_input.setText(intent.extras!!.getString("title"))
+                address_input.setText(intent.extras!!.getString("address"))
+                notes_input.setText(intent.extras!!.getString("notes"))
+                var time = intent.extras!!.getString("time")
+                var reminder = intent.extras!!.getString("reminder")
+            }
+        }
         val intentFilter= IntentFilter("notify")
         val NotificationBroadcastReceiver = MyBroadcastReceiverClass()
         registerReceiver(NotificationBroadcastReceiver, intentFilter)
@@ -147,6 +160,7 @@ class AddEvent : AppCompatActivity() {
                 }
 
                 var timeInMilli: Long? = null
+                var choosen_time: Long? = null
 
                 if(toggleTime == true) {
                     val cal = Calendar.getInstance()
@@ -156,9 +170,11 @@ class AddEvent : AppCompatActivity() {
                     cal.set(Calendar.MONTH, chosen_month!!.minus(1) as Int)
                     cal.set(Calendar.YEAR, chosen_year as Int)
                     timeInMilli = cal.timeInMillis - Calendar.getInstance().timeInMillis
+                    choosen_time = cal.timeInMillis
                 }
 
-                val event = Event(chosen_date!!, chosen_month!!, chosen_year!!, title_input.text.toString(), notes_input.text.toString(), final_address, timeInMilli?.toInt(), notifications.toString())
+
+                val event = Event(chosen_date!!, chosen_month!!, chosen_year!!, title_input.text.toString(), notes_input.text.toString(), final_address, choosen_time, notifications.toString())
                 dbHandler.addProduct(event)
 
                 if(notifications.equals("true")) {
@@ -173,7 +189,7 @@ class AddEvent : AppCompatActivity() {
         test_btn.setOnClickListener {
             val dbHandler = MyDBHandler(this, null, null, 1)
             var result = dbHandler.findEventsList("25", "12", "2019")
-            test_view.text = result?.size.toString()
+            test_view.text = result?.get(result.size - 1)?.time.toString()
             //test_view2.text = "month = ${result!![5].month}, day = ${result!![4].day} year = ${result!![4].year} "
         }
     }
@@ -221,7 +237,6 @@ class AddEvent : AppCompatActivity() {
         notificationIntent.putExtra(MyBroadcastReceiverClass.Constants.NOTIFICATION, notification)
         val pendingIntent = PendingIntent.getBroadcast(context, notificationId, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT)
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        Log.d("TIM", delay.toString())
         alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + delay, pendingIntent)
     }
 
