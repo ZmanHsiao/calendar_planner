@@ -41,10 +41,17 @@ class map_activity : AppCompatActivity(), OnMapReadyCallback {
 
             // Show a toast message if an address was found.
             if (resultCode == Constants.SUCCESS_RESULT) {
-                Toast.makeText(
-                    this@map_activity, R.string.address_found,
-                    Toast.LENGTH_SHORT
-                ).show()
+                if(address.equals("")) {
+                    Toast.makeText(
+                        this@map_activity, "This event doesn't have an address!",
+                        Toast.LENGTH_LONG
+                    ).show()
+                } else {
+                    Toast.makeText(
+                        this@map_activity, R.string.address_found,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
                 // Add a marker for the given event address
                 val event_location = LatLng(lat, long)
                 val descriptor = BitmapDescriptorFactory.fromResource(R.drawable.star_marker)
@@ -75,7 +82,7 @@ class map_activity : AppCompatActivity(), OnMapReadyCallback {
                 if (intent.hasExtra("address")) {
                     address = intent.getStringExtra("address")
                 } else {
-                    address = "fairfax condominium"
+                    address = ""
                 }
 
                 if (!Geocoder.isPresent()) {
@@ -101,7 +108,6 @@ class map_activity : AppCompatActivity(), OnMapReadyCallback {
 
             override fun onMapReady(googleMap: GoogleMap) {
                 mMap = googleMap
-
                     val fusedLocationClient =
                         LocationServices.getFusedLocationProviderClient(this@map_activity)
                     fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
