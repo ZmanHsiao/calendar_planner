@@ -30,13 +30,6 @@ class map_activity : AppCompatActivity(), OnMapReadyCallback {
     private val resultReceiver: AddressResultReceiver = AddressResultReceiver(handler = Handler())
     private lateinit var mMap: GoogleMap
     private var address: String = ""
-    private var day: String = ""
-    private var month: String = ""
-    private var year: String = ""
-    private var title: String = ""
-    private var notes: String = ""
-    private var time: String = ""
-    private var reminder: String = ""
 
 
     // Internal receiver class
@@ -60,11 +53,10 @@ class map_activity : AppCompatActivity(), OnMapReadyCallback {
                 val event_location = LatLng(lat, long)
                 val descriptor = BitmapDescriptorFactory.fromResource(R.drawable.star_marker)
                 mMap.addMarker(
-                    MarkerOptions().position(event_location).title("${title.capitalize()}").snippet(
-                        ("$addressOutput ($address) \n On $day/$month/$year at $time\n Notes: $notes\n Reminder: $reminder")
+                    MarkerOptions().position(event_location).title("${address.capitalize()}").snippet(
+                        ("Exact address: $addressOutput")
                     ).icon(descriptor)
                 ).showInfoWindow()
-
             } else {
                 Toast.makeText(
                     this@map_activity, "Error getting address. Found this instead: $addressOutput",
@@ -87,34 +79,6 @@ class map_activity : AppCompatActivity(), OnMapReadyCallback {
         if (intent.hasExtra("address")) {
             address = intent.getStringExtra("address")
         }
-        if (intent.hasExtra("day")) {
-            day = intent.getIntExtra("day", 0).toString()
-
-        }
-        if (intent.hasExtra("month")) {
-            month = intent.getIntExtra("month", 0 ).toString()
-
-        }
-        if (intent.hasExtra("year")) {
-            year = intent.getIntExtra("year", 0).toString()
-
-        }
-        if (intent.hasExtra("title")) {
-            title = intent.getStringExtra("title")
-
-        }
-        if (intent.hasExtra("notes")) {
-            notes = intent.getStringExtra("notes")
-
-        }
-        if (intent.hasExtra("time")) {
-            time = intent.getLongExtra("time", 0).toString()
-
-        }
-        if (intent.hasExtra("reminder")) {
-            reminder = intent.getStringExtra("reminder")
-
-        }
 
         if (!Geocoder.isPresent()) {
             Toast.makeText(
@@ -132,14 +96,6 @@ class map_activity : AppCompatActivity(), OnMapReadyCallback {
     private fun startIntentService() {
         val intent = Intent(this, FetchAddressIntentService::class.java).apply {
             putExtra(Constants.RECEIVER, resultReceiver)
-            putExtra(Constants.ADDRESS_KEY, address)
-            putExtra("DAY", day)
-            putExtra("MONTH", month)
-            putExtra("YEAR", year)
-            putExtra("TITLE", title)
-            putExtra("NOTES", notes)
-            putExtra("REMINDER", reminder)
-            putExtra("TIME", time)
 
         }
         startService(intent)

@@ -93,13 +93,6 @@ class MyRecyclerViewAdapter(context: Context, data: List<Event>): RecyclerView.A
         holder.find.setOnClickListener{
             val intent = Intent(ctx, map_activity::class.java)
             intent.putExtra("address", mData.get(pos).address)
-            intent.putExtra("day", day)
-            intent.putExtra("month", month)
-            intent.putExtra("year", year)
-            intent.putExtra("title", mData.get(pos).title)
-            intent.putExtra("notes", mData.get(pos).notes)
-            intent.putExtra("time", mData.get(pos).time)
-            intent.putExtra("reminder", mData.get(pos).reminder)
             ctx.startActivity(intent)
         }
     }
