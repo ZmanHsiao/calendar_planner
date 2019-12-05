@@ -65,14 +65,12 @@ class FetchAddressIntentService : IntentService("getLatLong") {
             val address = addresses.get(0)
             val lat = address.latitude
             val long = address.longitude
-            Log.d(TAG, "The latitude and longitude is $lat and $long")
 
             // Fetch the address lines using getAddressLine,
             // join them, and send them to the thread.
             val addressFragments = with(address) {
                 (0..maxAddressLineIndex).map { getAddressLine(it) }
             }
-            Log.i(TAG, getString(R.string.address_found))
             deliverResultToReceiver(
                 Constants.SUCCESS_RESULT,
                 addressFragments.joinToString(separator = "\n"),
