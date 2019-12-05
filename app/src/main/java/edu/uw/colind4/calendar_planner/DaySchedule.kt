@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,6 +30,7 @@ class DaySchedule : AppCompatActivity() {
         date.text = "$month/$day/$year"
         date.setOnClickListener{
             val intent = Intent(this, AddEvent::class.java)
+            intent.putExtra("type", "add")
             this.startActivity(intent)
         }
         var db = MyDBHandler(this, null, null, 1)
@@ -68,6 +70,7 @@ class MyRecyclerViewAdapter(context: Context, data: List<Event>): RecyclerView.A
         }
         holder.edit.setOnClickListener{
             val intent = Intent(ctx, AddEvent::class.java)
+            intent.putExtra("type", "update")
             intent.putExtra("day", day)
             intent.putExtra("month", month)
             intent.putExtra("year", year)
@@ -76,6 +79,7 @@ class MyRecyclerViewAdapter(context: Context, data: List<Event>): RecyclerView.A
             intent.putExtra("notes", mData.get(pos).notes)
             intent.putExtra("time", mData.get(pos).time)
             intent.putExtra("reminder", mData.get(pos).reminder)
+            intent.putExtra("id", mData.get(pos).id)
             ctx.startActivity(intent)
         }
         holder.find.setOnClickListener{

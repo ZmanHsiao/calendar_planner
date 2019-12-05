@@ -29,6 +29,8 @@ class AddEvent : AppCompatActivity() {
     val CHANNEL_ID : String = "reminder_channel"
     var toggleAddress: Boolean = true
     var toggleTime: Boolean = true
+    var type: String? = null
+    var id: Int? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,6 +50,16 @@ class AddEvent : AppCompatActivity() {
                 var reminder = intent.extras!!.getString("reminder")
             }
         }
+
+        if(intent.extras!!.getString("type") == "update") {
+            submit_btn.text = "Update Event"
+            type = "update"
+            id = intent.extras!!.getInt("id")
+        } else {
+            submit_btn.text = "Create Event"
+            type = "add"
+        }
+
         val intentFilter= IntentFilter("notify")
         val NotificationBroadcastReceiver = MyBroadcastReceiverClass()
         registerReceiver(NotificationBroadcastReceiver, intentFilter)
@@ -183,6 +195,13 @@ class AddEvent : AppCompatActivity() {
                     }
                     scheduleNotification(this, timeInMilli!!, 1)
                 }
+
+                if(type == "update") {
+                    dbHandler.deleteEvent(id!!)
+                }
+
+                val return_intent = Intent(this, MainActivity::class.java)
+                startActivity(return_intent)
             }
         }
 
