@@ -8,10 +8,10 @@ class Event {
     var title: String
     var notes: String?
     var address: String?
-    var time: Int?
+    var time: Long?
     var reminder: String?
 
-    constructor(dID: Int, dDay: Int?, dmonth: Int?, dyear: Int?, dtitle: String, dnotes: String?, daddress: String?, dtime: Int?, dreminder: String?) {
+    constructor(dID: Int, dDay: Int?, dmonth: Int?, dyear: Int?, dtitle: String, dnotes: String?, daddress: String?, dtime: Long?, dreminder: String?) {
         this.id = dID
         this.day = dDay
         this.month = dmonth
@@ -23,7 +23,7 @@ class Event {
         this.reminder = dreminder
     }
 
-    constructor(dDay: Int?, dmonth: Int, dyear: Int?, dtitle: String, dnotes: String?, daddress: String?, dtime: Int?, dreminder: String?) {
+    constructor(dDay: Int?, dmonth: Int, dyear: Int?, dtitle: String, dnotes: String?, daddress: String?, dtime: Long?, dreminder: String?) {
         this.id = null
         this.day = dDay
         this.month = dmonth

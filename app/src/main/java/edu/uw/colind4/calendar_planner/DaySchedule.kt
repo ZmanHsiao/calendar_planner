@@ -28,7 +28,7 @@ class DaySchedule : AppCompatActivity() {
         var year = intent.extras!!.getInt("year").toString()
         date.text = "$month/$day/$year"
         date.setOnClickListener{
-            val intent = Intent(this, add_event::class.java)
+            val intent = Intent(this, AddEvent::class.java)
             this.startActivity(intent)
         }
         var db = MyDBHandler(this, null, null, 1)
@@ -67,7 +67,7 @@ class MyRecyclerViewAdapter(context: Context, data: List<Event>): RecyclerView.A
             Toast.makeText(ctx, "Deleted", Toast.LENGTH_LONG).show()
         }
         holder.edit.setOnClickListener{
-            val intent = Intent(ctx, add_event::class.java)
+            val intent = Intent(ctx, AddEvent::class.java)
             ctx.startActivity(intent)
         }
     }

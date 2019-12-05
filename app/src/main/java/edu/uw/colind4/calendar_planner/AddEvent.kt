@@ -18,7 +18,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import java.text.SimpleDateFormat
 
-class add_event : AppCompatActivity() {
+class AddEvent : AppCompatActivity() {
 
     var chosen_date: Int? = null
     var chosen_month: Int? = null
@@ -151,6 +151,7 @@ class add_event : AppCompatActivity() {
                 }
 
                 var timeInMilli: Long? = null
+                var choosen_time: Long? = null
 
                 if(toggleTime == true) {
                     val cal = Calendar.getInstance()
@@ -160,9 +161,11 @@ class add_event : AppCompatActivity() {
                     cal.set(Calendar.MONTH, chosen_month!!.minus(1) as Int)
                     cal.set(Calendar.YEAR, chosen_year as Int)
                     timeInMilli = cal.timeInMillis - Calendar.getInstance().timeInMillis
+                    choosen_time = cal.timeInMillis
                 }
 
-                val event = Event(chosen_date!!, chosen_month!!, chosen_year!!, title_input.text.toString(), notes_input.text.toString(), final_address, timeInMilli?.toInt(), notifications.toString())
+
+                val event = Event(chosen_date!!, chosen_month!!, chosen_year!!, title_input.text.toString(), notes_input.text.toString(), final_address, choosen_time, notifications.toString())
                 dbHandler.addProduct(event)
 
                 if(notifications.equals("true")) {
@@ -177,7 +180,7 @@ class add_event : AppCompatActivity() {
         test_btn.setOnClickListener {
             val dbHandler = MyDBHandler(this, null, null, 1)
             var result = dbHandler.findEventsList("25", "12", "2019")
-            test_view.text = result?.size.toString()
+            test_view.text = result?.get(result.size - 1)?.time.toString()
             //test_view2.text = "month = ${result!![5].month}, day = ${result!![4].day} year = ${result!![4].year} "
         }
     }
@@ -225,7 +228,6 @@ class add_event : AppCompatActivity() {
         notificationIntent.putExtra(MyBroadcastReceiverClass.Constants.NOTIFICATION, notification)
         val pendingIntent = PendingIntent.getBroadcast(context, notificationId, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT)
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        Log.d("TIM", delay.toString())
         alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + delay, pendingIntent)
     }
 
