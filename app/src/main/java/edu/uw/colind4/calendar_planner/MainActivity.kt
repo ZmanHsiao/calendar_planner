@@ -102,11 +102,13 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
         setContentView(R.layout.activity_main)
-        addAddButton()
         var sdf = SimpleDateFormat("dd/MM/yyyy")
         val netdate = Date(calendar.date)
         var time = sdf.format(netdate)
         var tarray = time.split("/")
+        var sday = tarray[0]
+        var smonth = tarray[1]
+        var syear = tarray[2]
         open.setOnClickListener{openDay(tarray[0].toInt(), tarray[1].toInt(), tarray[2].toInt())}
         calendar.setOnDateChangeListener( object: CalendarView.OnDateChangeListener {
             override fun onSelectedDayChange(
@@ -115,9 +117,19 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 month: Int,
                 dayOfMonth: Int
             ) {
+                sday = dayOfMonth.toString()
+                smonth = (month + 1).toString()
+                syear = year.toString()
                 open.setOnClickListener{openDay(dayOfMonth, month + 1, year)}
             }
-        } )
+        })
+        newEventBtn.setOnClickListener {
+            val intent = Intent(this, add_event::class.java)
+            intent.putExtra("day", sday)
+            intent.putExtra("month", smonth)
+            intent.putExtra("year", syear)
+            this.startActivity(intent)
+        }
     }
 
     private fun openDay(day: Int, month: Int, year: Int) {
@@ -136,10 +148,4 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         sendBroadcast(intent)
     }
 
-    private fun addAddButton() {
-        newEventBtn.setOnClickListener {
-            val intent = Intent(this, add_event::class.java)
-            this.startActivity(intent)
-        }
-    }
 }

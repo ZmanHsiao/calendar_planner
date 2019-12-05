@@ -35,6 +35,10 @@ class add_event : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_event)
 
+        chosen_date = intent.extras!!.getString("day")!!.toInt()
+        chosen_month = intent.extras!!.getString("month")!!.toInt()
+        chosen_year = intent.extras!!.getString("year")!!.toInt()
+        date_btn.setText("" + chosen_month + "/" + chosen_date + "/"+ chosen_year)
         val intentFilter= IntentFilter("notify")
         val NotificationBroadcastReceiver = MyBroadcastReceiverClass()
         registerReceiver(NotificationBroadcastReceiver, intentFilter)

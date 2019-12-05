@@ -1,15 +1,21 @@
 package edu.uw.colind4.calendar_planner
 
 import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_day_schedule.*
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.rview_layout.view.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class DaySchedule : AppCompatActivity() {
@@ -21,6 +27,10 @@ class DaySchedule : AppCompatActivity() {
         var month = intent.extras!!.getInt("month").toString()
         var year = intent.extras!!.getInt("year").toString()
         date.text = "$month/$day/$year"
+        date.setOnClickListener{
+            val intent = Intent(this, add_event::class.java)
+            this.startActivity(intent)
+        }
         var db = MyDBHandler(this, null, null, 1)
         var events = db.findEventsList(day, month, year)
         rview.layoutManager = LinearLayoutManager(this)
@@ -32,6 +42,7 @@ class MyRecyclerViewAdapter(context: Context, data: List<Event>): RecyclerView.A
 
     var inflater = LayoutInflater.from(context)
     var mData = data
+    var ctx = context
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         var view = inflater.inflate(R.layout.rview_layout, parent, false)
@@ -42,6 +53,23 @@ class MyRecyclerViewAdapter(context: Context, data: List<Event>): RecyclerView.A
         holder.address.text = mData.get(pos).address
         holder.notes.text = mData.get(pos).notes
         holder.title.text = mData.get(pos).title
+//        var sdf = SimpleDateFormat("hh:mm a")
+//        var netdate = Date(mData.get(pos).time.toLong())
+//        var time = sdf.format(netdate)
+        holder.delete.setOnClickListener{
+            var db = MyDBHandler(ctx, null, null, 1)
+            var day = mData.get(pos).day.toString()
+            var month = mData.get(pos).month.toString()
+            var year = mData.get(pos).year.toString()
+            db.deleteEvent(mData.get(pos).id!!)
+            mData = db.findEventsList(day, month, year)!!
+            notifyDataSetChanged()
+            Toast.makeText(ctx, "Deleted", Toast.LENGTH_LONG).show()
+        }
+        holder.edit.setOnClickListener{
+            val intent = Intent(ctx, add_event::class.java)
+            ctx.startActivity(intent)
+        }
     }
 
     override fun getItemCount(): Int {
@@ -52,5 +80,8 @@ class MyRecyclerViewAdapter(context: Context, data: List<Event>): RecyclerView.A
         val title = view.title
         val address = view.address
         val notes = view.notes
+        val delete = view.delete
+        val find = view.find
+        val edit = view.edit
     }
 }
