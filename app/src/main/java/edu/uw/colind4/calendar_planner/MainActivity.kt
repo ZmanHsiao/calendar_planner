@@ -71,6 +71,7 @@ class MainActivity : AppCompatActivity() {
         })
         newEventBtn.setOnClickListener {
             val intent = Intent(this, AddEvent::class.java)
+            intent.putExtra("type", "add")
             intent.putExtra("day", sday)
             intent.putExtra("month", smonth)
             intent.putExtra("year", syear)
@@ -99,6 +100,7 @@ class MainActivity : AppCompatActivity() {
     private fun addAddButton() {
         newEventBtn.setOnClickListener {
             val intent = Intent(this, AddEvent::class.java)
+            intent.putExtra("type", "add")
             this.startActivity(intent)
         }
     }

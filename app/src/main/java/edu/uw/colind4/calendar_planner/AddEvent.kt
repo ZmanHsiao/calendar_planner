@@ -30,6 +30,8 @@ class AddEvent : AppCompatActivity() {
     var toggleAddress: Boolean = true
     var toggleTime: Boolean = true
     var NotificationBroadcastReceiver: MyBroadcastReceiverClass? = null
+    var type: String? = null
+    var id: Int? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,6 +51,16 @@ class AddEvent : AppCompatActivity() {
                 var reminder = intent.extras!!.getString("reminder")
             }
         }
+
+        if(intent.getStringExtra("type") == "update") {
+            submit_btn.text = "Update Event"
+            type = "update"
+            id = intent.extras!!.getInt("id")
+        } else {
+            submit_btn.text = "Create Event"
+            type = "add"
+        }
+
         val intentFilter= IntentFilter("notify")
         NotificationBroadcastReceiver = MyBroadcastReceiverClass()
         registerReceiver(NotificationBroadcastReceiver, intentFilter)
@@ -184,14 +196,14 @@ class AddEvent : AppCompatActivity() {
                     }
                     scheduleNotification(this, timeInMilli!!, 1)
                 }
-            }
-        }
 
-        test_btn.setOnClickListener {
-            val dbHandler = MyDBHandler(this, null, null, 1)
-            var result = dbHandler.findEventsList("25", "12", "2019")
-            test_view.text = result?.get(result.size - 1)?.time.toString()
-            //test_view2.text = "month = ${result!![5].month}, day = ${result!![4].day} year = ${result!![4].year} "
+                if(type == "update") {
+                    dbHandler.deleteEvent(id!!)
+                }
+
+                val return_intent = Intent(this, MainActivity::class.java)
+                startActivity(return_intent)
+            }
         }
     }
 
