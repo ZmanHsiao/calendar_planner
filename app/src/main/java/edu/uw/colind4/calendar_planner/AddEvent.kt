@@ -51,7 +51,7 @@ class AddEvent : AppCompatActivity() {
             }
         }
 
-        if(intent.extras!!.getString("type") == "update") {
+        if(intent.getStringExtra("type") == "update") {
             submit_btn.text = "Update Event"
             type = "update"
             id = intent.extras!!.getInt("id")

@@ -57,10 +57,16 @@ class MyRecyclerViewAdapter(context: Context, data: List<Event>): RecyclerView.A
         var year = mData.get(pos).year.toString()
         holder.address.text = mData.get(pos).address
         holder.notes.text = mData.get(pos).notes
-        holder.title.text = mData.get(pos).title
-//        var sdf = SimpleDateFormat("hh:mm a")
-//        var netdate = Date(mData.get(pos).time.toLong())
-//        var time = sdf.format(netdate)
+        if (mData.get(pos).time == null) {
+            holder.title.text = mData.get(pos).title
+        } else {
+            var sdf = SimpleDateFormat("hh:mm a")
+            var netdate = Date(mData.get(pos).time!!.toLong())
+            var time = sdf.format(netdate)
+            holder.title.text = time + " - " + mData.get(pos).title
+        }
+
+
         holder.delete.setOnClickListener{
             var db = MyDBHandler(ctx, null, null, 1)
             db.deleteEvent(mData.get(pos).id!!)
