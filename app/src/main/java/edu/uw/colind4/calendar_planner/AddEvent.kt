@@ -1,17 +1,14 @@
 package edu.uw.colind4.calendar_planner
 
 import android.app.*
-import android.content.BroadcastReceiver
+import android.appwidget.AppWidgetManager
+import android.content.*
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import kotlinx.android.synthetic.main.activity_add_event.*
 import java.util.*
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
 import android.os.Build
 import android.os.SystemClock
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
@@ -201,10 +198,21 @@ class AddEvent : AppCompatActivity() {
                     dbHandler.deleteEvent(id!!)
                 }
 
+                updateWidget()
+
                 val return_intent = Intent(this, MainActivity::class.java)
                 startActivity(return_intent)
             }
         }
+    }
+
+    fun updateWidget() {
+        val intent = Intent(this, HomeWidget::class.java)
+        intent.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
+        val ids = AppWidgetManager.getInstance(application)
+            .getAppWidgetIds(ComponentName(this, HomeWidget::class.java))
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids)
+        sendBroadcast(intent)
     }
 
     override fun onSupportNavigateUp(): Boolean {

@@ -41,14 +41,19 @@ class WidgetRemoteViewsFactory(private val context: Context, private val intent:
     }
 
     override fun getViewAt(position: Int): RemoteViews {
+        val event = result?.get(position) as Event
+        val day = event.day
+        val month = event.month
+        val year = event.year
         val fillInIntent = Intent()
             .apply {
-                putExtra("LIST_ITEM_TAG", position)
+                putExtra("day", day)
+                putExtra("month", month)
+                putExtra("year", year)
             }
-        Log.d("getViewAt", result?.get(position)?.title.toString())
         return RemoteViews(context.packageName, R.layout.widget_list_item)
             .apply {
-                setTextViewText(R.id.widget_list_text, result?.get(position)?.title.toString())
+                setTextViewText(R.id.widget_list_text, event.title)
                 setOnClickFillInIntent(R.id.widget_list_item, fillInIntent)
             }
     }

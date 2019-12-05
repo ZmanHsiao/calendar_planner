@@ -88,12 +88,12 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    private fun updateWidget() {
+    fun updateWidget() {
         val intent = Intent(this, HomeWidget::class.java)
         intent.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
-        val ids = AppWidgetManager.getInstance(this)
-            .getAppWidgetIds(ComponentName(this, AppWidgetManager::class.java))
-        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, ids)
+        val ids = AppWidgetManager.getInstance(application)
+            .getAppWidgetIds(ComponentName(this, HomeWidget::class.java))
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids)
         sendBroadcast(intent)
     }
 

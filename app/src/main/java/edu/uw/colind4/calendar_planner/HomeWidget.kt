@@ -23,7 +23,7 @@ class HomeWidget : AppWidgetProvider() {
                     PendingIntent.getActivity(context, 0, it, 0)
                 }
             val listViewIntent = Intent(context, WidgetRemoteViewsService::class.java)
-            val listViewOnClickIntent = Intent(context, MainActivity::class.java)
+            val listViewOnClickIntent = Intent(context, DaySchedule::class.java)
                 .let {
                     PendingIntent.getActivity(context, 0, it, 0)
                 }

@@ -1,5 +1,7 @@
 package edu.uw.colind4.calendar_planner
 
+import android.appwidget.AppWidgetManager
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
