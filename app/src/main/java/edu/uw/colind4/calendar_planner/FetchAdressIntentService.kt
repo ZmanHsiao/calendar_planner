@@ -20,9 +20,9 @@ object Constants {
     const val PACKAGE_NAME = "edu.uw.colind4.calendar_planner"
     const val RECEIVER = "$PACKAGE_NAME.RECEIVER"
     const val RESULT_DATA_KEY = "${PACKAGE_NAME}.RESULT_DATA_KEY"
-    const val LOCATION_DATA_EXTRA = "${PACKAGE_NAME}.LOCATION_DATA_EXTRA"
     const val LAT_KEY = "LATITUDE"
     const val LONG_KEY = "LONGITUDE"
+    const val ADDRESS_KEY = "${PACKAGE_NAME}.ADDRESS"
 }
 
 
@@ -31,9 +31,8 @@ class FetchAddressIntentService : IntentService("getLatLong") {
 
     override fun onHandleIntent(intent: Intent?) {
 
-//        val location = intent!!.getStringExtra(Constants.LOCATION_DATA_EXTRA)
+        val location = intent!!.getStringExtra(Constants.ADDRESS_KEY)
         receiver = intent!!.getParcelableExtra(Constants.RECEIVER)
-        val location = "fairfax condominium"
         val bias = " Seattle, WA"
 
         var addresses: List<Address> = emptyList()
