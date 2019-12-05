@@ -13,6 +13,7 @@
     <Button
         android:id="@+id/newEventBtn"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"></Button>
+        android:layout_height="wrap_content"
+        android:text="Takes you to add a new event"></Button>
 
 </LinearLayout>
