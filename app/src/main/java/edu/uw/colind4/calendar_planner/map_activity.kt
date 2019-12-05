@@ -132,14 +132,6 @@ class map_activity : AppCompatActivity(), OnMapReadyCallback {
     private fun startIntentService() {
         val intent = Intent(this, FetchAddressIntentService::class.java).apply {
             putExtra(Constants.RECEIVER, resultReceiver)
-            putExtra(Constants.ADDRESS_KEY, address)
-            putExtra("DAY", day)
-            putExtra("MONTH", month)
-            putExtra("YEAR", year)
-            putExtra("TITLE", title)
-            putExtra("NOTES", notes)
-            putExtra("REMINDER", reminder)
-            putExtra("TIME", time)
 
         }
         startService(intent)
