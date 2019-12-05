@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".add_event">
+    tools:context=".AddEvent">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -78,12 +78,26 @@
 
         </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
         <ToggleButton
             android:id="@+id/notification_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textOn="No Reminder"
             android:textOff="Set Reminder"/>
+
+        <EditText
+            android:id="@+id/notification_input"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:inputType="number"
+            android:hint="Minutes before event"/>
+
+    </LinearLayout>
 
         <Button
             android:id="@+id/submit_btn"

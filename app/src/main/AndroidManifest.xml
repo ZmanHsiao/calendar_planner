@@ -16,12 +16,31 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+<<<<<<< HEAD
         <activity android:name=".map_activity"></activity>
 
 
         <service
             android:name=".FetchAddressIntentService"
             android:exported="false" />
+=======
+        <receiver android:name=".HomeWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/home_widget_info" />
+        </receiver>
+        <service android:name=".WidgetRemoteViewsService"
+            android:permission="android.permission.BIND_REMOTEVIEWS"></service>
+
+        <service
+            android:name=".FetchAddressIntentService"
+            android:exported="false"/>
+        <activity android:name=".AddEvent"></activity>
+>>>>>>> ca418b5ac0de3a62d0fa766c36419ef768e78c58
 
         <activity android:name=".add_event" />
         <!--
