@@ -160,7 +160,6 @@ class AddEvent : AppCompatActivity() {
                     choosen_time = cal.timeInMillis
                 }
 
-                Log.d("TA1", choosen_time.toString())
 
                 val event = Event(chosen_date!!, chosen_month!!, chosen_year!!, title_input.text.toString(), notes_input.text.toString(), final_address, choosen_time, notifications.toString())
                 dbHandler.addProduct(event)
@@ -225,7 +224,6 @@ class AddEvent : AppCompatActivity() {
         notificationIntent.putExtra(MyBroadcastReceiverClass.Constants.NOTIFICATION, notification)
         val pendingIntent = PendingIntent.getBroadcast(context, notificationId, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT)
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        Log.d("TIM", delay.toString())
         alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + delay, pendingIntent)
     }
 
