@@ -48,6 +48,7 @@ class MainActivity : AppCompatActivity() {
                 putExtra("address", "smith tower")
             }
             startActivity(intent)
+            addAddButton()
 
 
         }
