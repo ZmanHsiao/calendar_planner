@@ -34,11 +34,22 @@ class AddEvent : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_event)
-
-        chosen_date = intent.extras!!.getString("day")!!.toInt()
-        chosen_month = intent.extras!!.getString("month")!!.toInt()
-        chosen_year = intent.extras!!.getString("year")!!.toInt()
-        date_btn.setText("" + chosen_month + "/" + chosen_date + "/"+ chosen_year)
+        var s = intent.hasExtra("day")
+        Toast.makeText(this, s.toString(), Toast.LENGTH_LONG).show()
+        if (intent.extras!!.containsKey("day")) {
+            chosen_date = intent.extras!!.getString("day")!!.toInt()
+            chosen_month = intent.extras!!.getString("month")!!.toInt()
+            chosen_year = intent.extras!!.getString("year")!!.toInt()
+            date_btn.setText("" + chosen_month + "/" + chosen_date + "/"+ chosen_year)
+        }
+        if (intent.extras!!.containsKey("title")) {
+            // EVENT INFORMATION HERE! NEEDS TO BE STORED
+            var title = intent.extras!!.getString("title")
+            var address = intent.extras!!.getString("address")
+            var time = intent.extras!!.getString("time")
+            var notes = intent.extras!!.getString("notes")
+            var reminder = intent.extras!!.getString("reminder")
+        }
         val intentFilter= IntentFilter("notify")
         val NotificationBroadcastReceiver = MyBroadcastReceiverClass()
         registerReceiver(NotificationBroadcastReceiver, intentFilter)

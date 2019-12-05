@@ -46,13 +46,7 @@ class MainActivity : AppCompatActivity() {
             )
         }
 
-//        test_btn.setOnClickListener {
-//            val intent = Intent(this, map_activity::class.java).apply {
-//                putExtra("address", "smith tower")
-//            }
-//            startActivity(intent)
-//            addAddButton()
-//        }
+
 
         var sdf = SimpleDateFormat("dd/MM/yyyy")
         val netdate = Date(calendar.date)

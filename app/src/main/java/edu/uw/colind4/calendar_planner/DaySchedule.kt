@@ -50,6 +50,9 @@ class MyRecyclerViewAdapter(context: Context, data: List<Event>): RecyclerView.A
     }
 
     override fun onBindViewHolder(holder: MyRecyclerViewAdapter.ViewHolder, pos: Int) {
+        var day = mData.get(pos).day.toString()
+        var month = mData.get(pos).month.toString()
+        var year = mData.get(pos).year.toString()
         holder.address.text = mData.get(pos).address
         holder.notes.text = mData.get(pos).notes
         holder.title.text = mData.get(pos).title
@@ -58,9 +61,6 @@ class MyRecyclerViewAdapter(context: Context, data: List<Event>): RecyclerView.A
 //        var time = sdf.format(netdate)
         holder.delete.setOnClickListener{
             var db = MyDBHandler(ctx, null, null, 1)
-            var day = mData.get(pos).day.toString()
-            var month = mData.get(pos).month.toString()
-            var year = mData.get(pos).year.toString()
             db.deleteEvent(mData.get(pos).id!!)
             mData = db.findEventsList(day, month, year)!!
             notifyDataSetChanged()
@@ -68,6 +68,19 @@ class MyRecyclerViewAdapter(context: Context, data: List<Event>): RecyclerView.A
         }
         holder.edit.setOnClickListener{
             val intent = Intent(ctx, AddEvent::class.java)
+            intent.putExtra("day", day)
+            intent.putExtra("month", month)
+            intent.putExtra("year", year)
+            intent.putExtra("title", mData.get(pos).title)
+            intent.putExtra("address", mData.get(pos).address)
+            intent.putExtra("notes", mData.get(pos).notes)
+            intent.putExtra("time", mData.get(pos).time)
+            intent.putExtra("reminder", mData.get(pos).reminder)
+            ctx.startActivity(intent)
+        }
+        holder.find.setOnClickListener{
+            val intent = Intent(ctx, map_activity::class.java)
+            intent.putExtra("address", mData.get(pos).address)
             ctx.startActivity(intent)
         }
     }
