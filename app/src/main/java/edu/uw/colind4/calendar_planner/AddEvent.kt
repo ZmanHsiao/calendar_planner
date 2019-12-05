@@ -147,6 +147,7 @@ class AddEvent : AppCompatActivity() {
                 }
 
                 var timeInMilli: Long? = null
+                var choosen_time: Long? = null
 
                 if(toggleTime == true) {
                     val cal = Calendar.getInstance()
@@ -156,9 +157,12 @@ class AddEvent : AppCompatActivity() {
                     cal.set(Calendar.MONTH, chosen_month!!.minus(1) as Int)
                     cal.set(Calendar.YEAR, chosen_year as Int)
                     timeInMilli = cal.timeInMillis - Calendar.getInstance().timeInMillis
+                    choosen_time = cal.timeInMillis
                 }
 
-                val event = Event(chosen_date!!, chosen_month!!, chosen_year!!, title_input.text.toString(), notes_input.text.toString(), final_address, timeInMilli?.toInt(), notifications.toString())
+                Log.d("TA1", choosen_time.toString())
+
+                val event = Event(chosen_date!!, chosen_month!!, chosen_year!!, title_input.text.toString(), notes_input.text.toString(), final_address, choosen_time, notifications.toString())
                 dbHandler.addProduct(event)
 
                 if(notifications.equals("true")) {
@@ -173,7 +177,7 @@ class AddEvent : AppCompatActivity() {
         test_btn.setOnClickListener {
             val dbHandler = MyDBHandler(this, null, null, 1)
             var result = dbHandler.findEventsList("25", "12", "2019")
-            test_view.text = result?.size.toString()
+            test_view.text = result?.get(result.size - 1)?.time.toString()
             //test_view2.text = "month = ${result!![5].month}, day = ${result!![4].day} year = ${result!![4].year} "
         }
     }
